@@ -14,7 +14,23 @@ services:
     volumes:
       - ./config/prometheus:/etc/prometheus
       - ./data/prometheus:/prometheus
+    networks:
+      - sre-network
+
+  grafana:
+    image: grafana/grafana:10.2.2
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data/grafana:/var/lib/grafana
+      - ./config/grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+      - GF_USERS_ALLOW_SIGN_UP=false
 
 networks:
-  default:
-    name: sre-network
+  sre-network:
+    driver: bridge
