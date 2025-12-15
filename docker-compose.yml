@@ -48,6 +48,46 @@ services:
     networks:
       - sre-network
 
+  loki:
+    image: grafana/loki:2.9.2
+    container_name: loki
+    restart: unless-stopped
+    command:
+      - '-config.file=/etc/loki/loki-config.yml'
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./config/loki:/etc/loki
+      - ./data/loki:/loki
+    networks:
+      - sre-network
+
+  promtail:
+    image: grafana/promtail:2.9.2
+    container_name: promtail
+    restart: unless-stopped
+    command:
+      - '-config.file=/etc/promtail/promtail-config.yml'
+    volumes:
+      - ./config/promtail:/etc/promtail
+      - /var/log:/var/log
+    networks:
+      - sre-network
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.50
+    container_name: jaeger
+    restart: unless-stopped
+    ports:
+      - "16686:16686"
+      - "14268:14268"
+    environment:
+      - SPAN_STORAGE_TYPE=badger
+    volumes:
+      - ./data/jaeger:/var/lib/jaeger
+    networks:
+      - sre-network
+
 networks:
   sre-network:
     driver: bridge
