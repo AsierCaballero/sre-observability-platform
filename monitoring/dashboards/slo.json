@@ -1,0 +1,49 @@
+{
+  "title": "SLO Tracking",
+  "uid": "slo-tracking",
+  "tags": ["slo", "observability"],
+  "timezone": "browser",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Availability",
+      "type": "stat",
+      "gridPos": {"h": 6, "w": 8, "x": 0, "y": 0},
+      "targets": [
+        {
+          "expr": "(sum(rate(http_requests_total[5m])) - sum(rate(http_requests_total{status=~\"5..\"}[5m]))) / sum(rate(http_requests_total[5m])) * 100",
+          "legendFormat": "Availability"
+        }
+      ],
+      "datasource": "Prometheus"
+    },
+    {
+      "id": 2,
+      "title": "Request Latency p99",
+      "type": "timeseries",
+      "gridPos": {"h": 6, "w": 16, "x": 8, "y": 0},
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "p99"
+        }
+      ],
+      "datasource": "Prometheus"
+    },
+    {
+      "id": 3,
+      "title": "Error Rate",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 6},
+      "targets": [
+        {
+          "expr": "sum(rate(http_requests_total{status=~\"5..\"}[5m])) / sum(rate(http_requests_total[5m])) * 100",
+          "legendFormat": "Error Rate"
+        }
+      ],
+      "datasource": "Prometheus"
+    }
+  ],
+  "schemaVersion": 38,
+  "version": 1
+}
