@@ -1,0 +1,77 @@
+{
+  "title": "Infrastructure Overview",
+  "uid": "infra-overview",
+  "tags": ["infrastructure", "prometheus"],
+  "timezone": "browser",
+  "panels": [
+    {
+      "id": 1,
+      "title": "CPU Usage",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "targets": [
+        {
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "datasource": "Prometheus"
+    },
+    {
+      "id": 2,
+      "title": "Memory Usage",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "targets": [
+        {
+          "expr": "(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "datasource": "Prometheus"
+    },
+    {
+      "id": 3,
+      "title": "Disk Usage",
+      "type": "gauge",
+      "gridPos": {"h": 6, "w": 8, "x": 0, "y": 8},
+      "targets": [
+        {
+          "expr": "(node_filesystem_size_bytes{mountpoint=\"/\"} - node_filesystem_avail_bytes{mountpoint=\"/\"}) / node_filesystem_size_bytes{mountpoint=\"/\"} * 100",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "datasource": "Prometheus"
+    },
+    {
+      "id": 4,
+      "title": "Network Traffic",
+      "type": "timeseries",
+      "gridPos": {"h": 6, "w": 16, "x": 8, "y": 8},
+      "targets": [
+        {
+          "expr": "rate(node_network_receive_bytes_total[5m])",
+          "legendFormat": "received {{device}}"
+        },
+        {
+          "expr": "rate(node_network_transmit_bytes_total[5m])",
+          "legendFormat": "transmitted {{device}}"
+        }
+      ],
+      "datasource": "Prometheus"
+    },
+    {
+      "id": 5,
+      "title": "Service Status",
+      "type": "stat",
+      "gridPos": {"h": 6, "w": 24, "x": 0, "y": 14},
+      "targets": [
+        {"expr": "up{job=\"prometheus\"}", "legendFormat": "Prometheus"},
+        {"expr": "up{job=\"node-exporter\"}", "legendFormat": "Node Exporter"}
+      ],
+      "datasource": "Prometheus"
+    }
+  ],
+  "schemaVersion": 38,
+  "version": 1
+}
