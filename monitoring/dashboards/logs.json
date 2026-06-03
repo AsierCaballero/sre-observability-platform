@@ -1,0 +1,36 @@
+{
+  "title": "Logs Overview",
+  "uid": "logs-overview",
+  "tags": ["logs", "loki"],
+  "timezone": "browser",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Log Volume",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 0},
+      "targets": [
+        {
+          "expr": "sum by (level) (rate({job=\"system-logs\"}[5m]))",
+          "legendFormat": "{{level}}"
+        }
+      ],
+      "datasource": "Loki"
+    },
+    {
+      "id": 2,
+      "title": "Recent Errors",
+      "type": "logs",
+      "gridPos": {"h": 10, "w": 24, "x": 0, "y": 8},
+      "targets": [
+        {
+          "expr": "{job=\"system-logs\"} |= \"error\"",
+          "limit": 50
+        }
+      ],
+      "datasource": "Loki"
+    }
+  ],
+  "schemaVersion": 38,
+  "version": 1
+}
