@@ -1,62 +1,95 @@
 # SRE Observability Platform
 
-Plataforma de observabilidad para entornos de producción con Prometheus, Grafana, Loki, Jaeger y más.
+[![Docker](https://img.shields.io/badge/docker-compose-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/compose/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.11-blue?logo=python)](docker/app.py)
 
-## Servicios
+A batteries-inlined observability stack for production environments running Prometheus, Grafana, Loki, Jaeger, and more — all wired up with Docker Compose, Kubernetes manifests, and Terraform for AWS.
 
-| Servicio | Puerto | Descripción |
-|----------|--------|-------------|
-| Prometheus | 9090 | Métricas e infraestructura |
-| Grafana | 3000 | Dashboards y visualización |
-| AlertManager | 9093 | Gestión de alertas |
-| Loki | 3100 | Agregación de logs |
-| Jaeger | 16686 | Tracing distribuido |
-| Node Exporter | 9100 | Métricas de sistema |
-| Blackbox Exporter | 9115 | Monitorización externa |
-| Sample App | 8080 | App demo con métricas |
+## What's inside
 
-## Quick Start
+| Service | Port | What it does |
+|---------|------|-------------|
+| Prometheus | 9090 | Metrics collection & infra monitoring |
+| Grafana | 3000 | Dashboards & visualization |
+| AlertManager | 9093 | Alert routing & deduplication |
+| Loki | 3100 | Log aggregation (Promtail ships the logs) |
+| Jaeger | 16686 | Distributed tracing |
+| Node Exporter | 9100 | Host-level system metrics |
+| Blackbox Exporter | 9115 | External end-point probing |
+| Sample App | 8080 | Demo Flask app exporting Prometheus metrics |
+
+## Getting started
 
 ```bash
 docker compose up -d
 ./scripts/health-check.sh
 ```
 
+Grafana will be available at `http://localhost:3000` (admin / admin123).
+
+## Project layout
+
+```
+.
+├── config/                  # Prometheus, Grafana, Loki, AlertManager configs
+│   ├── alertmanager/
+│   ├── blackbox/
+│   ├── grafana/
+│   ├── loki/
+│   ├── prometheus/
+│   └── promtail/
+├── docker/                  # Sample app sources and Dockerfile
+├── docker-compose.yml       # Local dev environment (all 8 services)
+├── k8s/                     # Kubernetes manifests
+├── monitoring/dashboards/   # Pre-built Grafana dashboards (infra, SLO, logs)
+├── scripts/                 # Health check, manage, backup, restore
+├── terraform/               # AWS provisioning (EC2, VPC, etc.)
+├── .github/workflows/       # CI/CD pipelines
+├── CONTRIBUTING.md
+├── LICENSE
+└── README.md
+```
+
 ## Scripts
 
-| Script | Función |
+| Script | Purpose |
 |--------|---------|
-| `scripts/health-check.sh` | Verificar estado de servicios |
-| `scripts/manage.sh` | start/stop/restart/status |
-| `scripts/backup.sh` | Backup de configuraciones |
-| `scripts/restore.sh` | Restaurar configuraciones |
+| `scripts/health-check.sh` | Probe all services and report health |
+| `scripts/manage.sh` | Control the stack (start / stop / restart / status) |
+| `scripts/backup.sh` | Snapshot configs and persistent data |
+| `scripts/restore.sh` | Restore from a backup snapshot |
 
-## Componentes
+## Dashboards
 
-- **Dashboards**: Infrastructure, SLO, Logs
-- **Sample App**: Flask con métricas Prometheus
-- **Infra**: Kubernetes manifests, Terraform AWS
-- **CI/CD**: GitHub Actions
+A few Grafana dashboards are included under `monitoring/dashboards/`:
 
-## Deployment
+- **Infrastructure** — host metrics, container resource usage, Prometheus targets
+- **SLO** — service-level objectives and error budgets
+- **Logs** — Loki-based log exploration and alert correlation
 
-### Docker Compose (local)
+## Deployment options
+
+### Local — Docker Compose
+
 ```bash
 docker compose up -d
 ```
 
 ### Kubernetes
+
 ```bash
 kubectl apply -f k8s/
 ```
 
-### AWS (Terraform)
+### AWS — Terraform
+
 ```bash
 cd terraform
 terraform init && terraform apply
 ```
 
-## Documentación
+## Further reading
 
 - [Deployment Guide](docs/DEPLOYMENT.md)
 - [Changelog](CHANGELOG.md)
