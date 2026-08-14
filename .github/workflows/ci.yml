@@ -32,4 +32,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build sample app
-        run: docker build -t sample-app ./docker
+        run: docker build -t sample-app -f ./docker/Dockerfile.app ./docker
