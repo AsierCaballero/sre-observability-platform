@@ -1,10 +1,18 @@
 # SRE Observability Platform
 
+[![CI](https://img.shields.io/github/actions/workflow/status/AsierCaballero/sre-observability-platform/ci.yml?label=CI&logo=github)](https://github.com/AsierCaballero/sre-observability-platform/actions)
 [![Docker](https://img.shields.io/badge/docker-compose-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/compose/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.11-blue?logo=python)](docker/app.py)
 
-A batteries-inlined observability stack for production environments running Prometheus, Grafana, Loki, Jaeger, and more — all wired up with Docker Compose, Kubernetes manifests, and Terraform for AWS.
+Batteries-included observability stack for production-minded teams: Prometheus, Grafana, Loki, Jaeger — wired with Docker Compose, Kubernetes manifests, and Terraform for AWS.
+
+## Who this is for
+
+Engineering orgs that need **MTTR / SLI visibility** without buying a vendor stack on day one. Useful as a reference architecture when I land observability engagements (dashboards, alerting, logs, traces).
+
+**Limitations:** starter pack — tune retention, HA, and auth for your environment; AWS Terraform example is a bootstrap, not a full multi-account design.
+
+**Engagements:** [Calendly](https://calendly.com/asier-caballero) · [Profile](https://github.com/AsierCaballero)
 
 ## What's inside
 
